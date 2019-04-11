@@ -1,0 +1,15 @@
+# https://github.com/meeio/DANN.git
+/__pycache__
+/_MLOGS
+/RECORDS
+/CDAN-18
+/_PUBLIC_DATASET_
+/.vscode
+**/__pycache__
+*.test.py
+/PADA
+/CDAN
+/DeepCORAL
+/JDDA-Master
+/others
+/deep_cotail
