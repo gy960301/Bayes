@@ -1,7 +1,7 @@
 import torch
 
 from mmodel import get_module
-from mtrain.watcher import watcheraaa
+from mtrain.watcher import watcher
 
 if __name__ == "__main__":
 
