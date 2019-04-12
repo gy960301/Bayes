@@ -14,7 +14,7 @@ def get_module(name):
         from .fine_tune import model
         return None, model.Finetune()
     elif name == 'BY':
-        from .bayes import model
+        from .Bayes import model
         return model.param, model.BayesModel()
     elif name == 'OPEN':
         from .openset import model
