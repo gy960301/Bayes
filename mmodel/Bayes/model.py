@@ -85,7 +85,7 @@ class BayesModel(TrainableModule):
         )
 
         self.define_log("losses", group="train")
-        self.define_log("valid_loss", "valid_accu", group="valid")
+        self.define_log("valid_accu", group="valid")
 
     def _train_process(self, datas):
 
@@ -121,7 +121,6 @@ class BayesModel(TrainableModule):
 
             self._update_logs(
                 {
-                    "valid_loss": self.ce(predict, label),
                     "valid_accu": corrent_count * 100 / current_size,
                 },
                 group="valid",
