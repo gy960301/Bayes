@@ -67,8 +67,9 @@ def get_dataset(dsname, domain=None, split="train", size=224):
         crop = 28
 
         trans = [
-            transforms.Resize(crop),
+            # transforms.Resize(crop),
             transforms.ToTensor(),
+            transforms.Normalize((0.1307), (0.3081))
         ]
     else:
         resize = 256
@@ -114,7 +115,13 @@ def get_dataset(dsname, domain=None, split="train", size=224):
     if dsname == "MNIST":
         train = split == "train"
         data_set = ds.MNIST(
-            root=root, train=train, transform=transform, download=True
+            root=root, train=train, transform=transforms.Compose(
+                [
+                transforms.ToTensor(),
+                transforms.Normalize((0.1307,),(0.3081,))
+                ]
+            ), 
+            download=True
         )
     ## SVHN dataset
     elif dsname == "SVHN":

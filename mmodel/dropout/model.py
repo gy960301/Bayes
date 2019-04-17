@@ -5,19 +5,21 @@ import torch
 
 from ..basic_module import TrainableModule, ELoaderIter
 from .params import get_params
-from .networks.bayes_network import BayesianNetwork
+from .networks.networks import DropconNet
 
 import mdata.dataloader as mdl
 
 param = get_params()
 
-class BayesModel(TrainableModule):
+class Dropout(TrainableModule):
     
     def __init__(self):
-        super(BayesModel, self).__init__(param)
+        super(Dropout, self).__init__(param)
 
         self.best_accurace = 0.0
         self.total = self.corret = 0
+
+        self.ce = torch.nn.CrossEntropyLoss()
 
         self._all_ready()
 
@@ -34,7 +36,6 @@ class BayesModel(TrainableModule):
                 batch_size=param.batch_size,
                 drop_last=True,
                 shuffle=True,
-                num_workers=4,
             )
             return l
 
@@ -59,27 +60,29 @@ class BayesModel(TrainableModule):
             return its.next(need_end=True)
 
     def _regist_networks(self):
-        net = BayesianNetwork(param)
-        return {"BN": net}
+        net = DropconNet(param)
+        return {"DP": net}
 
     def _regist_losses(self):
 
         optimer = {
             "type": torch.optim.SGD,
-            "lr": param.lr,
-            # "momentum": 0.9,
-            # "weight_decay": 0.001,
-            # "nesterov": True,
+            "lr": 0.01,
+            "momentum": 0.9,
+            "weight_decay": 0.0001,
+            "nesterov": True,
         }
 
-        # lr_scheduler = {
-        #     "type": torch.optim.lr_scheduler.StepLR,
-        #     "step_size": self.total_steps / 3,
-        # }
+        lr_scheduler = {
+            "type": torch.optim.lr_scheduler.MultiStepLR,
+            "milestones": [3000, 5000],
+        }
+        
+        
 
         self.define_loss(
             "loss",
-            networks=["BN"],
+            networks=["DP"],
             optimer=optimer,
             # decay_op=lr_scheduler,
         )
@@ -91,7 +94,8 @@ class BayesModel(TrainableModule):
 
         img, label = datas
 
-        loss, _, _, _ = self.BN.sample_elbo(img, label)
+        prediction = self.DP(img)
+        loss = self.ce(prediction, label)
 
         self._update_loss("loss", loss)
         self._update_log("losses", loss)
@@ -106,7 +110,7 @@ class BayesModel(TrainableModule):
 
             img, label = datas
             # get result from a valid_step
-            predict = self.B-N(img)
+            predict = self.DP(img)
 
             # calculate valid accurace and make record
             current_size = label.size()[0]
@@ -137,3 +141,4 @@ class BayesModel(TrainableModule):
             self.best_accurace = max((self.best_accurace, accu))
             self.total = 0
             self.corret = 0
+
