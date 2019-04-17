@@ -48,7 +48,7 @@ parser.add_argument("--eval_per_step", type=int, default=1000, help="Epochs of t
 parser.add_argument("--tag", type=str, default='NO TAG', help="tag for this train.")
 
 parser.add_argument(
-    "--lr", type=float, default=0.01
+    "--lr", type=float, default=0.001
 )
 
 parser.add_argument(
