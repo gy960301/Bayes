@@ -106,7 +106,7 @@ class BayesModel(TrainableModule):
 
             img, label = datas
             # get result from a valid_step
-            predict = self.B-N(img)
+            predict = self.BN(img)
 
             # calculate valid accurace and make record
             current_size = label.size()[0]
