@@ -38,9 +38,9 @@ parser.add_argument(
     "--use_gpu", type=bool, default=True, help="Use GPU to train the model"
 )
 
-parser.add_argument("--steps", type=int, default=75000*5, help="Epochs of train data")
+parser.add_argument("--steps", type=int, default=75000, help="Epochs of train data")
 
-parser.add_argument("--log_per_step", type=int, default=100, help="Epochs of train data")
+parser.add_argument("--log_per_step", type=int, default=200, help="Epochs of train data")
 
 parser.add_argument("--eval_per_step", type=int, default=1000, help="Epochs of train data")
 
