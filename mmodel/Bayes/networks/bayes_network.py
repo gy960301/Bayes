@@ -169,16 +169,9 @@ class BayesianNetwork(WeightedModule):
 
         negative_log_likelihood = F.nll_loss(outputs.mean(0), target, reduction="sum")
 
-
         loss = (
             log_variational_posterior - log_prior
         ) / 118 + negative_log_likelihood
-
-        print("========")
-        print(loss)
-        print(log_variational_posterior)
-        print(log_prior)
-        print(negative_log_likelihood)
 
         return (
             loss,
