@@ -31,14 +31,14 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "--eval_batch_size", type=int, default=256, help="Size for Mini-Batch Optimization"
+    "--eval_batch_size", type=int, default=128, help="Size for Mini-Batch Optimization"
 )
 
 parser.add_argument(
     "--use_gpu", type=bool, default=True, help="Use GPU to train the model"
 )
 
-parser.add_argument("--steps", type=int, default=24000, help="Epochs of train data")
+parser.add_argument("--steps", type=int, default=75000*5, help="Epochs of train data")
 
 parser.add_argument("--log_per_step", type=int, default=100, help="Epochs of train data")
 

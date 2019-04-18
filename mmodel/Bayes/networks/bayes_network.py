@@ -41,15 +41,19 @@ class ScaleMixtureGaussian(object):
     def __init__(self, pi, sigma1, sigma2):
         super().__init__()
         self.pi = pi
-        self.sigma1 = sigma1
-        self.sigma2 = sigma2
-        self.gaussian1 = torch.distributions.Normal(0, np.exp(sigma1))
-        self.gaussian2 = torch.distributions.Normal(0, np.exp(sigma2))
+
+        import math
+        SIGMA_1 = torch.cuda.FloatTensor([math.exp(-0)])
+        SIGMA_2 = torch.cuda.FloatTensor([math.exp(-6)])
+
+        self.gaussian1 = torch.distributions.Normal(0, SIGMA_1)
+        self.gaussian2 = torch.distributions.Normal(0, SIGMA_2)
 
     def log_prob(self, inputs):
         # inputs = inputs.cpu()
         prob1 = torch.exp(self.gaussian1.log_prob(inputs))
         prob2 = torch.exp(self.gaussian2.log_prob(inputs))
+
         return (torch.log(self.pi * prob1 + (1 - self.pi) * prob2)).sum()
 
 
@@ -79,16 +83,20 @@ class BayesianLinear(WeightedModule):
         self.bias = Gaussian(self.bias_mu, self.bias_rho)
 
         # 先验分布
+        pi = 0.5
+        sigma1 = -0
+        sigma2 = -6
+
         self.weight_prior = ScaleMixtureGaussian(
-            param.pi, param.sigma1, param.sigma2
+            pi, sigma1, sigma2
         )
         self.bias_prior = ScaleMixtureGaussian(
-            param.pi, param.sigma1, param.sigma2
+            pi, sigma1, sigma2
         )
         self.log_prior = 0
         self.log_variational_posterior = 0
 
-        self.has_init = True
+        # self.has_init = True
 
     def forward(self, input, sample=False, calculate_log_probs=False):
 
@@ -121,12 +129,9 @@ class BayesianNetwork(WeightedModule):
         self.l2 = BayesianLinear(400, 400, param)
         self.l3 = BayesianLinear(400, 10, param)
         self.param = param
-        self.has_init = True
-
-        self.outputs = torch.zeros(5, param.batch_size, param.class_num)
+        # self.has_init = True
 
     def forward(self, x, sample=False):
-
         x = x.view(-1, 28 * 28)
         x = F.relu(self.l1(x, sample))
         x = F.relu(self.l2(x, sample))
@@ -162,13 +167,18 @@ class BayesianNetwork(WeightedModule):
         log_prior = log_priors.mean()
         log_variational_posterior = log_var_posteriors.mean()
 
-        negative_log_likelihood = F.nll_loss(
-            outputs.mean(0), target, size_average=False
-        )
+        negative_log_likelihood = F.nll_loss(outputs.mean(0), target, reduction="sum")
+
 
         loss = (
             log_variational_posterior - log_prior
-        ) / p.class_num + negative_log_likelihood
+        ) / 118 + negative_log_likelihood
+
+        print("========")
+        print(loss)
+        print(log_variational_posterior)
+        print(log_prior)
+        print(negative_log_likelihood)
 
         return (
             loss,

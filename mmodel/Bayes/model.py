@@ -41,6 +41,9 @@ class BayesModel(TrainableModule):
         train_loader = get_loader(train_set)
         valid_loader = get_loader(valid_set)
 
+        params.len_train_batch = len(train_loader)
+        params.len_test_batch = len(train_loader)
+
         iters = {
             "train": ELoaderIter(train_loader),
             "valid": ELoaderIter(valid_loader),
