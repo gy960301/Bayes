@@ -7,7 +7,7 @@ if __name__ == "__main__":
 
     torch.backends.cudnn.benchmark = True
     # name = input('model name:')
-    name = "BY"
+    name = "DROP"
     try:
         param, A = get_module(name)
 
