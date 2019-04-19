@@ -78,8 +78,8 @@ class BayesModel(TrainableModule):
 
         lr_scheduler = {
             "type": torch.optim.lr_scheduler.StepLR,
-            "step_size": self.total_steps / 10,
-            "gamma": 0.5
+            "step_size": self.total_steps / 6,
+            "gamma": 0.2
         }
 
         self.define_loss(
