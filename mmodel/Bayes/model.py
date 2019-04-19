@@ -8,6 +8,7 @@ from .params import get_params
 from .networks.bayes_network import BayesianNetwork
 
 import mdata.dataloader as mdl
+from mground.gpu_utils import anpai
 
 param = get_params()
 
@@ -94,7 +95,7 @@ class BayesModel(TrainableModule):
 
         img, label = datas
 
-        loss, _, _, _ = self.BN.sample_elbo(img, label)
+        loss, _, _, _ = self.BN.sample_elbo(img, label,param.trainsamples)
 
         self._update_loss("loss", loss)
         self._update_log("losses", loss)
@@ -107,29 +108,54 @@ class BayesModel(TrainableModule):
 
         def handle_datas(datas):
 
-            img, label = datas
+            img, target = datas
             # get result from a valid_step
-            predict = self.BN(img)
+            correct_count = 0
+            corrects = torch.zeros(params.samples + 1)
+            predicts=torch.zeros(params.samples+1,params.eval_batch_size,params.class_num)
+
+            corrects, predicts = anpai((corrects, predicts), True, False)
+
+            for i in range(params.samples):
+                predicts[i]=self.BN(img,sample=True)
+            predicts[params.samples]=self.BN(img,sample=False)
+            predict=predicts.mean(0)
+            
+
+            preds = preds = predicts.max(2, keepdim=True)[1]
+            pred = predict.max(1, keepdim=True)[1]  # 最大的log的索引
+            corrects += (
+                preds.eq(target.view_as(pred)).float().sum(dim=1).squeeze()
+            )
+            correct_count += pred.eq(target.view_as(pred)).sum().item()
+
+            current_size = target.size()[0]
+
+            for index, num in enumerate(corrects):
+                if index == param.samples:
+                    #print("Component{} Accurancy:{}/{}".format(index, num, current_size))
+                
+                    print("Posterior Mean Accurancy: {}/{}".format(num, current_size))
+            
+
+        
+            #predict = self.BN(img)
 
             # calculate valid accurace and make record
-            current_size = label.size()[0]
+            
 
             # pred_cls = predict.data.max(1)[1]
             # corrent_count = pred_cls.eq(label.data).sum()
 
-            _, predic_class = torch.max(predict, 1)
-            corrent_count = (
-                (torch.squeeze(predic_class) == label).sum().float()
-            )
 
             self._update_logs(
                 {
-                    "valid_accu": corrent_count * 100 / current_size,
+                    "valid_accu": correct_count * 100 / current_size,
                 },
                 group="valid",
             )
 
-            return corrent_count, current_size
+            return correct_count, current_size
 
         if not end_epoch:
             right, size = handle_datas(datas)

@@ -40,11 +40,11 @@ class Gaussian(object):
 class ScaleMixtureGaussian(object):
     def __init__(self, pi, sigma1, sigma2):
         super().__init__()
-        self.pi = pi
+        self.pi=pi
 
         import math
-        SIGMA_1 = torch.cuda.FloatTensor([math.exp(-0)])
-        SIGMA_2 = torch.cuda.FloatTensor([math.exp(-6)])
+        SIGMA_1 = torch.cuda.FloatTensor([math.exp(sigma1)])
+        SIGMA_2 = torch.cuda.FloatTensor([math.exp(sigma2)])
 
         self.gaussian1 = torch.distributions.Normal(0, SIGMA_1)
         self.gaussian2 = torch.distributions.Normal(0, SIGMA_2)
@@ -148,18 +148,18 @@ class BayesianNetwork(WeightedModule):
             + self.l2.log_variational_posterior
         )
 
-    def sample_elbo(self, input, target):
+    def sample_elbo(self, input, target, samples):
         p = self.param
 
-        outputs = torch.zeros(p.samples, p.batch_size, p.class_num)
-        log_priors = torch.zeros(p.samples)
-        log_var_posteriors = torch.zeros(p.samples)
+        outputs = torch.zeros(samples, p.batch_size, p.class_num)
+        log_priors = torch.zeros(samples)
+        log_var_posteriors = torch.zeros(samples)
 
         outputs, log_priors, log_var_posteriors = anpai(
             [outputs, log_priors, log_var_posteriors], p.use_gpu, False
         )
 
-        for i in range(p.samples):
+        for i in range(samples):
             outputs[i] = self(input, sample=True)
             log_priors[i] = self.log_prior()
             log_var_posteriors[i] = self.log_variational_posterior()

@@ -84,12 +84,11 @@ from mtrain.watcher import parse_losses_record, parse_watcher_dict
 
 def curve_graph(smooth_ration=10, **kwargs):
 
-    color = ["red", "green", "red"]
     idx = 0
 
     for name, records in kwargs.items():
 
-        y = [0,] + records[1]
+        y = records[1]
         x = [records[0] * i for i in range(len(y))]
         data_count = len(y)
 
@@ -102,22 +101,11 @@ def curve_graph(smooth_ration=10, **kwargs):
         y_smooth = interpolate.spline(x, y, x_smooth)
 
         # tck = interpolate.spline(x, y)
-        plt.plot(x, y, "-", label=name, linewidth=2.5, color=color[idx])
+        plt.plot(x, y, "-", label=name, linewidth=2.5)
         plt.minorticks_on()
         plt.grid(which="major", color="gray", linestyle="-", linewidth=1)
         plt.grid(which="minor", color="gray", linestyle=":", linewidth=0.5)
-        plt.axvline(x=300, ymin=0, ymax=1, linestyle="--", linewidth=2)
-        plt.axvline(x=500, ymin=0, ymax=1, linestyle="--", linewidth=2)
-        plt.axvline(
-            x=2000,
-            ymin=0,
-            ymax=1,
-            linestyle="--",
-            linewidth=2,
-            color="gray",
-        )
-        # plt.axvline(x=2.20589566)
-        idx += 1
+
 
     plt.legend(loc="best")
     plt.title("A10 to W10+10")
@@ -165,7 +153,7 @@ def for_bias(file):
 
 # assert False
 
-file_name = r"C:\Code\BBB\RECORDS\BY_0412_1940.NO TAG.json"
+file_name = r"C:\Code\BBB\RECORDS\BY_0418_2127.NO TAG.json"
 
 file2_name = r"keeps\sigmoid_changing\fixed_back_coffe\alpha20_center015_upper006_coeff_{}.json"
 
@@ -174,7 +162,7 @@ file2_name = r"keeps\sigmoid_changing\fixed_back_coffe\alpha20_center015_upper00
 
 accu = {
 
-    "sig1": for_("losses", file_name),
+    "accu": for_("valid_accu", file_name),
 
 }
 
