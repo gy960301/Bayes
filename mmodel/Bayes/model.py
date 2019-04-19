@@ -76,16 +76,17 @@ class BayesModel(TrainableModule):
             # "nesterov": True,
         }
 
-        # lr_scheduler = {
-        #     "type": torch.optim.lr_scheduler.StepLR,
-        #     "step_size": self.total_steps / 3,
-        # }
+        lr_scheduler = {
+            "type": torch.optim.lr_scheduler.StepLR,
+            "step_size": self.total_steps / 30000,
+            "gamma": 0.5
+        }
 
         self.define_loss(
             "loss",
             networks=["BN"],
             optimer=optimer,
-            # decay_op=lr_scheduler,
+             decay_op=lr_scheduler,
         )
 
         self.define_log("losses", group="train")
