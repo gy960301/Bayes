@@ -25,13 +25,14 @@ class DropconNet(WeightedModule):
 
 
         self.predictor = nn.Sequential(
+            nn.Dropout(p=0.3),
             nn.Linear(28 * 28, 400),
             nn.ReLU(),
+            
             nn.Dropout(p=0.3),
 
             nn.Linear(400, 400),
             nn.ReLU(),
-            nn.Dropout(p=0.3),
 
             nn.Linear(400, 10),
         )
