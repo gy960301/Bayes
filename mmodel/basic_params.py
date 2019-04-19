@@ -27,22 +27,22 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    "--batch_size", type=int, default=512, help="Size for Mini-Batch Optimization"
+    "--batch_size", type=int, default=256, help="Size for Mini-Batch Optimization"
 )
 
 parser.add_argument(
-    "--eval_batch_size", type=int, default=512, help="Size for Mini-Batch Optimization"
+    "--eval_batch_size", type=int, default=256, help="Size for Mini-Batch Optimization"
 )
 
 parser.add_argument(
     "--use_gpu", type=bool, default=True, help="Use GPU to train the model"
 )
 
-parser.add_argument("--steps", type=int, default=75000, help="Epochs of train data")
+parser.add_argument("--steps", type=int, default=37500, help="Epochs of train data")
 
-parser.add_argument("--log_per_step", type=int, default=100, help="Epochs of train data")
+parser.add_argument("--log_per_step", type=int, default=50, help="Epochs of train data")
 
-parser.add_argument("--eval_per_step", type=int, default=1000, help="Epochs of train data")
+parser.add_argument("--eval_per_step", type=int, default=100, help="Epochs of train data")
 
 
 parser.add_argument("--tag", type=str, default='NO TAG', help="tag for this train.")

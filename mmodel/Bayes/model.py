@@ -69,7 +69,7 @@ class BayesModel(TrainableModule):
     def _regist_losses(self):
 
         optimer = {
-            "type": torch.optim.SGD,
+            "type": torch.optim.Adam,
             "lr": param.lr,
             # "momentum": 0.9,
             # "weight_decay": 0.001,
@@ -78,7 +78,7 @@ class BayesModel(TrainableModule):
 
         lr_scheduler = {
             "type": torch.optim.lr_scheduler.StepLR,
-            "step_size": self.total_steps / 6,
+            "step_size": self.total_steps / 3,
             "gamma": 0.2
         }
 
