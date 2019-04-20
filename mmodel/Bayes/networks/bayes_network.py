@@ -125,8 +125,8 @@ class BayesianNetwork(WeightedModule):
     def __init__(self, param):
         # torch.nn.Module.
         super().__init__()
-        self.l1 = BayesianLinear(28 * 28, 400, param)
-        self.l2 = BayesianLinear(400, 400, param)
+        self.l1 = BayesianLinear(28 * 28, 800, param)
+        self.l2 = BayesianLinear(800, 800, param)
         self.l3 = BayesianLinear(400, 10, param)
         self.param = param
         # self.has_init = True
