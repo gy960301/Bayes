@@ -153,7 +153,7 @@ def for_bias(file):
 
 # assert False
 
-file_name = r"C:\Code\BBB\RECORDS\BY_0418_2127.NO TAG.json"
+file_name = r"C:\Users\Gloria\Desktop\BY_0419_2308.BbBgaussian5.json"
 
 file2_name = r"keeps\sigmoid_changing\fixed_back_coffe\alpha20_center015_upper006_coeff_{}.json"
 
