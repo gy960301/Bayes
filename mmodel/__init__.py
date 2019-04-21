@@ -8,6 +8,12 @@ def get_module(name):
     elif name == 'DROP':
         from .dropout import model
         return model.param, model.Dropout()
+     elif name == 'BY800':
+        from .Bayes import model800
+        return model800.param, model800.BayesModel()
+     elif name == 'BY1200':
+        from .Bayes import model1200
+        return model1200.param, model1200.BayesModel()
     
 
 
