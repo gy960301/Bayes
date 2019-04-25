@@ -14,6 +14,9 @@ def get_module(name):
     elif name == 'BY1200':
         from .Bayes import model1200
         return model1200.param, model1200.BayesModel()
+    elif name == 'SGHMC':
+        from .SGHMC import model
+        return model.param, model.SGHMCModel()
     
 
 

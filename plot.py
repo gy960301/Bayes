@@ -153,8 +153,11 @@ def for_bias(file):
 
 # assert False
 
-file_name = r"C:\Users\Gloria\Desktop\BY_0421_1000.BbB11.json"
-
+file_name1 = r"C:\Users\Gloria\Desktop\实验结果对比\BY_0423_1115.BbB44.json"
+file_name2 = r"C:\Users\Gloria\Desktop\实验结果对比\BY_0420_1128.BbBgaussian7.json"
+file_name3 = r"C:\Users\Gloria\Desktop\实验结果对比\DROP_0419_2033.SGD.json"
+file_name4 = r"C:\Users\Gloria\Desktop\实验结果对比\DROP_0419_1529.Dropout.json"
+file_name5 = r"C:\Users\Gloria\Desktop\实验结果对比\DROP_0419_1645.Dropconnect1.json"
 file2_name = r"keeps\sigmoid_changing\fixed_back_coffe\alpha20_center015_upper006_coeff_{}.json"
 
 # for_(key, file_name)
@@ -162,7 +165,11 @@ file2_name = r"keeps\sigmoid_changing\fixed_back_coffe\alpha20_center015_upper00
 
 accu = {
 
-    "accu": for_("valid_accu", file_name),
+    "BbB": for_("valid_accu", file_name1),
+    "BbB_gaussian": for_("valid_accu", file_name2),
+    "SGD": for_("valid_accu", file_name3),
+    "Dropout": for_("valid_accu", file_name4),
+    "Dropconnect": for_("valid_accu", file_name5),
 
 }
 
